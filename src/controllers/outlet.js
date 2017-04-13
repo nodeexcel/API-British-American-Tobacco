@@ -1,8 +1,5 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import OutletProvider from '../providers/OutletProvider.js'
-import db from '../db'
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
 
 export class OutletController extends BaseAPIController {
@@ -21,25 +18,30 @@ export class OutletController extends BaseAPIController {
                 type_name: outlet.type_name,
                 membership_number: outlet.membership_number
               })
-                    .then((data) => {
-                      if (data) {
-                        this._db.Outlet.create({
-                          outlet_id: data.id,
-                          bat_id: outlet.bat_id,
-                          membership_id: outlet.membership_id,
-                          outlet_name: outlet.outlet_name,
-                          points_value: outlet.points_value,
-                          points_expiration_date: outlet.points_expiration_date,
-                          rebate_rate: outlet.rebate_rate
-                        })
-                                .then(() => res.json({ status: 1 }))
-                                .catch(this.handleErrorResponse.bind(null, res))
-                      }
-                    })
-                    .catch(this.handleErrorResponse.bind(null, res))
+              .then((data) => {
+                if (data) {
+                  this._db.Outlet.create({
+                    outlet_id: data.id,
+                    bat_id: outlet.bat_id,
+                    membership_id: outlet.membership_id,
+                    outlet_name: outlet.outlet_name,
+                    points_value: outlet.points_value,
+                    points_expiration_date: outlet.points_expiration_date,
+                    rebate_rate: outlet.rebate_rate
+                  })
+            .then(() => res.json({ status: 1 }))
+            .catch((error) => {
+              this._db.outletAccount.destroy({ where : { id: data.id } })
+              throw new Error(error)
+            })
+            .catch(this.handleErrorResponse.bind(null, res))
+                }
+              })
+              .catch(this.handleErrorResponse.bind(null, res))
             })
             .catch(this.handleErrorResponse.bind(null, res))
   }
+
   checkLogin = (req, res) => {
     this._db.Outlet.findOne({
       include: [{
@@ -115,7 +117,6 @@ export class OutletController extends BaseAPIController {
     let id = req.params.id
     this._db.Outlet.getOutletById(id)
             .then((data) => {
-              console.log(data)
               if (!data) {
                 throw new Error('Outlet Data Not Found')
               } else {

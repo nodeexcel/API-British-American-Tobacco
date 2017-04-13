@@ -25,12 +25,12 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { email: TME_Account.email } })
                         .then((email) => {
                           if (email) {
-                            reject('Email Already In Use')
+                            reject(new Error('Email Already In Use'))
                           } else {
                             this.findOne({ where: { bat_id: TME_Account.bat_id } })
                                     .then((batid) => {
                                       if (batid) {
-                                        reject('BAT ID already used. Please provide a unique BAT ID')
+                                        reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
                                       } else {
                                         resolve()
                                       }
@@ -60,7 +60,7 @@ export default function (sequelize, DataTypes) {
                               resolve(data)
                             })
           } else {
-            throw new Error(reject('Invalid Page Number'))
+            reject(new Error('Invalid Page Number'))
           }
         })
       }

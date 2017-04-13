@@ -29,7 +29,7 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { bat_id: SKU.bat_id } })
                         .then((batid) => {
                           if (batid) {
-                            reject('BAT ID already used. Please provide a unique BAT ID')
+                            reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
                           } else {
                             resolve()
                           }
@@ -70,7 +70,7 @@ export default function (sequelize, DataTypes) {
                                               }
 
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(sku)
                                               }
                                             })
@@ -103,8 +103,8 @@ export default function (sequelize, DataTypes) {
         return new Promise((resolve, reject) => {
           this.findById(id)
                         .then((data) => {
-                          if (data == null) {
-                            reject('Invalid Id')
+                          if (data === null) {
+                            reject(new Error('Invalid Id'))
                           } else {
                             sequelize.import('Brand').find({ where: { id: data.dataValues.brand_id } })
                                     .then((brand) => {

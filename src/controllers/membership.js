@@ -1,6 +1,4 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
-import db from '../db'
 import MembershipProvider from '../providers/MembershipProvider'
 
 export class MembershipController extends BaseAPIController {
@@ -46,9 +44,9 @@ export class MembershipController extends BaseAPIController {
     this._db.Membership.findAll({
       order: '`id` DESC'
     })
-            .then((membership) => {
-              res.json(membership)
-            })
+    .then((membership) => {
+      res.json(membership)
+    })
   }
 
     // get by id...

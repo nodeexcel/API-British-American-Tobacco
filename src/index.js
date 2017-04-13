@@ -6,7 +6,6 @@ import path from 'path'
 import glob from 'glob'
 import chalk from 'chalk'
 import bodyParser from 'body-parser'
-import initializeDb from './db'
 import config from './config'
 
 const app = express()

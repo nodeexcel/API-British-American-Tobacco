@@ -4,15 +4,15 @@ import * as BaseProvider from './BaseProvider'
 const create = (body, res) => {
   return new Promise((resolve, reject) => {
     if (!body.type_name && !body.rebate_rate && !body.order && !body.min_required_points) {
-      reject('All fields are required')
+      reject(new Error('All fields are required'))
     } else if (!body.type_name) {
-      reject('Membership Type Is Required')
+      reject(new Error('Membership Type Is Required'))
     } else if (!body.rebate_rate) {
-      reject('Rebate Rate is required')
+      reject(new Error('Rebate Rate is required'))
     } else if (!body.order) {
-      reject('Order is required')
+      reject(new Error('Order is required'))
     } else if (!body.min_required_points) {
-      reject('Minimum Point is required')
+      reject(new Error('Minimum Point is required'))
     } else {
       resolve({ ...body })
     }

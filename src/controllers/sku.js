@@ -1,7 +1,5 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import SkuProvider from '../providers/SkuProvider.js'
-import db from '../db'
 
 export class SkuController extends BaseAPIController {
     // inserting data into sku..
@@ -65,7 +63,7 @@ export class SkuController extends BaseAPIController {
     let id = req.params.id
     this._db.Sku.destroy({ where: { id: id } })
             .then((response) => {
-              if (response == 1) {
+              if (response === 1) {
                 res.json('SKU data deleted')
               } else {
                 throw new Error('Invalid id')

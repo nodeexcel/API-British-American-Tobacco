@@ -14,7 +14,7 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { bat_id: BRAND.bat_id } })
                         .then((batid) => {
                           if (batid) {
-                            reject('BAT ID already used. Please provide a unique BAT ID')
+                            reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
                           } else {
                             resolve()
                           }
@@ -38,7 +38,7 @@ export default function (sequelize, DataTypes) {
                           if (data[0] != null) {
                             async.each(data, (item, err) => {
                               if (!item) {
-                                reject(err)
+                                reject(new Error(err))
                               } else {
                                 sequelize.import('Sku').count({ where: { brand_id: item.id } })
                                             .then((number) => {
@@ -69,7 +69,7 @@ export default function (sequelize, DataTypes) {
           this.findAll({ where: { id } })
                         .then((data) => {
                           if (!data) {
-                            reject(data)
+                            reject(new Error(data))
                           } else {
                             sequelize.import('Sku').count({ where: { brand_id: data[0].dataValues.id } })
                                     .then((number) => {
@@ -87,9 +87,7 @@ export default function (sequelize, DataTypes) {
     },
     associate: (models) => {
       Brand.hasMany(models.Sku, { foreignKey: 'brand_id' })
-    },
-    timestamps: true,
-    freezeTableName: true
+    }
   })
   return Brand
 }

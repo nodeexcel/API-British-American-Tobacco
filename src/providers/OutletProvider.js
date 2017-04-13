@@ -5,23 +5,23 @@ import * as BaseProvider from './BaseProvider'
 const create = (model, body, res) => {
   return new Promise((resolve, reject) => {
     if (!body.bat_id && !body.membership_number && !body.email && !body.password && !body.first_name && !body.last_name && !body.birthday && !body.membership_id && !body.outlet_name) {
-      reject('All fields are Required')
+      reject(new Error('All fields are Required'))
     } else if (!body.bat_id) {
-      reject('BAT ID is Required')
+      reject(new Error('BAT ID is Required'))
     } else if (!body.membership_number) {
-      reject('Membership Number is Required')
+      reject(new Error('Membership Number is Required'))
     } else if (!body.password) {
-      reject('Password is Required')
+      reject(new Error('Password is Required'))
     } else if (!body.first_name) {
-      reject('First Name is Required')
+      reject(new Error('First Name is Required'))
     } else if (!body.last_name) {
-      reject('Last Name is Required')
+      reject(new Error('Last Name is Required'))
     } else if (!body.birthday) {
-      reject('Birthday is Required')
+      reject(new Error('Birthday is Required'))
     } else if (!body.membership_id) {
-      reject('Membership Type is Required')
+      reject(new Error('Membership Type is Required'))
     } else if (!body.outlet_name) {
-      reject('Outlet Name is Required')
+      reject(new Error('Outlet Name is Required'))
     } else {
       let date = new Date()
       let salt = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()

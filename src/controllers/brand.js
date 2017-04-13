@@ -1,8 +1,5 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import BrandProvider from '../providers/BrandProvider.js'
-import db from '../db'
-import async from 'async'
 
 export class BrandController extends BaseAPIController {
     // inserting data into brand..
@@ -74,7 +71,7 @@ export class BrandController extends BaseAPIController {
     let id = req.params.id
     this._db.Brand.destroy({ where: { id: id } })
             .then((response) => {
-              if (response == 1) {
+              if (response === 1) {
                 res.json('Brand data Deleted')
               } else {
                 throw new Error('Invalid id')

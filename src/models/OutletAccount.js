@@ -22,7 +22,7 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { email: Outlet_Account.email } })
                         .then((email) => {
                           if (email) {
-                            reject('Email Already In Use')
+                            reject(new Error('Email Already In Use'))
                           } else {
                             resolve()
                           }
@@ -36,7 +36,7 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       getAllOutlets (page, limit, offset) {
         return new Promise((resolve, reject) => {
-          if (page == -1) {
+          if (page === -1) {
             this.findAll({ order: '`id` DESC' })
                             .then((data) => {
                               resolve(data)

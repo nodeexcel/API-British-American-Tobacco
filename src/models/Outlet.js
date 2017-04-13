@@ -1,4 +1,3 @@
-import db from '../db'
 import async from 'async'
 
 export default function (sequelize, DataTypes) {
@@ -37,7 +36,7 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { bat_id: Outlet.bat_id } })
                         .then((batid) => {
                           if (batid) {
-                            reject('BAT ID already used. Please provide a unique BAT ID')
+                            reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
                           } else {
                             resolve()
                           }
@@ -52,7 +51,7 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       getAllOutlets (page, limit, offset) {
         return new Promise((resolve, reject) => {
-          if (page == -1) {
+          if (page === -1) {
             this.findAll({
               order: '`id` DESC',
               include: [{
@@ -75,7 +74,7 @@ export default function (sequelize, DataTypes) {
                                               }
                                               outlet.push(details)
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(outlet)
                                               }
                                             })
@@ -107,7 +106,7 @@ export default function (sequelize, DataTypes) {
                                               }
                                               outlet.push(details)
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(outlet)
                                               }
                                             })
@@ -115,7 +114,7 @@ export default function (sequelize, DataTypes) {
                               }
                             })
           } else {
-            throw new Error(reject('Invalid Page Number'))
+            reject(new Error('Invalid Page Number'))
           }
         })
       },
@@ -133,8 +132,8 @@ export default function (sequelize, DataTypes) {
             }]
           })
                         .then((data) => {
-                          if (data == null) {
-                            reject('Outlet data is not found')
+                          if (data === null) {
+                            reject(new Error('Outlet data is not found'))
                           } else {
                             resolve(data)
                           }
@@ -146,7 +145,7 @@ export default function (sequelize, DataTypes) {
         return new Promise((resolve, reject) => {
           this.update({ tme_id: tmeid }, { where: { id } })
                         .then((data) => {
-                          if (data != 0) {
+                          if (data !== 0) {
                             resolve({
                               status: 1,
                               message: 'Outlet Assigned'
@@ -177,7 +176,7 @@ export default function (sequelize, DataTypes) {
                           if (data) {
                             resolve(data)
                           } else {
-                            reject('No Outlet Data Found')
+                            reject(new Error('No Outlet Data Found'))
                           }
                         })
         })

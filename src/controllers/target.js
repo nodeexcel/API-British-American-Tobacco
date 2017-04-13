@@ -1,7 +1,5 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import TargetProvider from '../providers/TargetProvider.js'
-import db from '../db'
 
 export class TargetController extends BaseAPIController {
     /* Controller for Target  */

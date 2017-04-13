@@ -1,6 +1,4 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
-import db from '../db'
 
 export class BrandController extends BaseAPIController {
     // inserting data into brand..
@@ -19,7 +17,7 @@ export class BrandController extends BaseAPIController {
                       const SKU = data
                       if (data) {
                         req.body.sku_id = data.id
-                        if (req.body.order_type == 'DELIVERY') {
+                        if (req.body.order_type === 'DELIVERY') {
                           this._db.Sales_order.create({
                             transaction_value: req.body.transaction_value,
                             outlet_id: req.body.outlet_id,
@@ -52,7 +50,7 @@ export class BrandController extends BaseAPIController {
                                             })
                                     })
                                     .catch(this.handleErrorResponse.bind(null, res))
-                        } else if (req.body.order_type == 'RETURN') {
+                        } else if (req.body.order_type === 'RETURN') {
                           this._db.Sales_return.create({
                             transaction_value: req.body.transaction_value,
                             outlet_id: req.body.outlet_id,
@@ -78,7 +76,7 @@ export class BrandController extends BaseAPIController {
 
     // upadating sales data ....
   salesUpdate = (req, res) => {
-    if (req.body.order_type == 'DELIVERY') {
+    if (req.body.order_type === 'DELIVERY') {
       const data = {
         transaction_value: req.body.transaction_value,
         transaction_details: req.body.transaction_details
@@ -92,7 +90,7 @@ export class BrandController extends BaseAPIController {
                   }
                 })
                 .catch(this.handleErrorResponse.bind(null, res))
-    } else if (req.body.order_type == 'RETURN') {
+    } else if (req.body.order_type === 'RETURN') {
       const data = {
         transaction_value: req.body.transaction_value,
         transaction_details: req.body.transaction_details
@@ -116,7 +114,7 @@ export class BrandController extends BaseAPIController {
 
     // getting sales data....
   getSales = (req, res) => {
-    if (req.params.order_type == 'DELIVERY') {
+    if (req.params.order_type === 'DELIVERY') {
       this._db.Sales_order.getOrderSales(req.params.id)
                 .then((data) => {
                   res.json({
@@ -124,7 +122,7 @@ export class BrandController extends BaseAPIController {
                     type: 'DELIVERY'
                   })
                 })
-    } else if (req.params.order_type == 'RETURN') {
+    } else if (req.params.order_type === 'RETURN') {
       this._db.Sales_return.getReturnSales(req.params.id)
                 .then((data) => {
                   res.json({
@@ -132,7 +130,7 @@ export class BrandController extends BaseAPIController {
                     type: 'RETURN'
                   })
                 })
-    } else if (req.params.order_type == 'DELIVERY_RETURN') {
+    } else if (req.params.order_type === 'DELIVERY_RETURN') {
       this._db.Sales_order.getOrderSales(req.params.id)
                 .then((data) => {
                   if (data) {
@@ -188,7 +186,7 @@ export class BrandController extends BaseAPIController {
 
     // sales rollback
   salesRollback = (req, res) => {
-    if (req.params.type == 'DELIVERY') {
+    if (req.params.type === 'DELIVERY') {
       this._db.Sales_order.destroy({ where: { report_id: req.params.id } })
                 .then((data) => {
                   if (data) {
@@ -206,7 +204,7 @@ export class BrandController extends BaseAPIController {
                   }
                 })
                 .catch(this.handleErrorResponse.bind(null, res))
-    } else if (req.params.type == 'RETURN') {
+    } else if (req.params.type === 'RETURN') {
       this._db.Sales_return.destroy({ where: { report_id: req.params.id } })
                 .then((data) => {
                   if (data) {
@@ -230,7 +228,7 @@ export class BrandController extends BaseAPIController {
                   }
                 })
                 .catch(this.handleErrorResponse.bind(null, res))
-    } else if (req.params.type == 'DELIVERY_RETURN') {
+    } else if (req.params.type === 'DELIVERY_RETURN') {
       this._db.Sales_order.destroy({ where: { report_id: req.params.id } })
                 .then(() => this._db.Sales_return.destroy({ where: { report_id: req.params.id } }))
                 .then((data) => {

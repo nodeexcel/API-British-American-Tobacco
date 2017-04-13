@@ -1,7 +1,6 @@
 import Sequelize from 'sequelize'
 import models from './models'
 import config from './config'
-import chalk from 'chalk'
 const db = {}
 
 // create your instance of sequelize

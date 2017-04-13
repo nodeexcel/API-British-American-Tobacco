@@ -19,7 +19,7 @@ export default function (sequelize, DataTypes) {
           this.findOne({ where: { email: Admin_Account.email } })
                         .then((admin) => {
                           if (admin) {
-                            reject('Email Already In Use')
+                            reject(new Error('Email Already In Use'))
                           } else {
                             resolve()
                           }

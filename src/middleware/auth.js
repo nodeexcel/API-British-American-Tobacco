@@ -1,6 +1,4 @@
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
-import config from '../config'
 
 export class AuthController {
     // middleware for logged in users

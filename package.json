@@ -9,6 +9,7 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "test": "eslint src",
+    "lint": "eslint src",
     "debug": "babel src -d dist --watch --source-maps"
   },
   "repository": "developit/express-es6-rest-api",

@@ -23,7 +23,7 @@ export default function (sequelize, DataTypes) {
       const date = item.upload_date
       const upload_date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear()
       let type = 'RETURN'
-      if (item.return_file_title == '' || item.return_file_title == null) {
+      if (item.return_file_title === '' || item.return_file_title === null) {
         type = 'DELIVERY'
       } else if ((item.return_file_title !== null && item.return_file_title !== '') && (item.sales_file_title !== null && item.sales_file_title !== '')) {
         type = 'DELIVERY & RETURN'
@@ -38,7 +38,7 @@ export default function (sequelize, DataTypes) {
   }
   detail.push(insert)
   count--
-  if (count == 0) {
+  if (count === 0) {
     resolve(detail.reverse())
   }
 })
