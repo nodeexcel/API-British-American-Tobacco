@@ -83,27 +83,8 @@ export default function (sequelize, DataTypes) {
                         })
                         .catch((error) => { res.json({ error }) })
         })
-      },
-            // get Sku by id...
-      getSkuById (id) {
-        return new Promise((resolve, reject) => {
-          this.findById(id)
-                        .then((data) => {
-                          if (data == null) {
-                            reject('Invalid Id')
-                          } else {
-                            sequelize.import('Brand').find({ where: { id: data.dataValues.brand_id } })
-                                    .then((brand) => {
-                                      const details = {
-                                        brand: data,
-                                        brandName: brand.brandname
-                                      }
-                                      resolve({ details })
-                                    })
-                          }
-                        })
-        })
       }
+
     },
     associate: (models) => {
       Sku.hasOne(models.Promotion, { foreignKey: 'sku_id' })

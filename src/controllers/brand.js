@@ -50,7 +50,9 @@ export class BrandController extends BaseAPIController {
               } else {
                 throw new Error('Invalid id')
               }
-            }).catch(this.handleErrorResponse.bind(null, res))
+            })
+            .then(next)
+            .catch(this.handleErrorResponse.bind(null, res))
   }
 
     // update brand ....

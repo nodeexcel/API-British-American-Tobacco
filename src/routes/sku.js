@@ -17,5 +17,7 @@ export default (app) => {
     // delete sku ....
   app.route('/sku/delete/:id').delete(auth.requiresLogin, sku.deleteSku)
 
+  app.param('id', sku.skuById)
+
   return app
 }
