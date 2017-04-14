@@ -1,4 +1,5 @@
 import admin from '../controllers/adminAccount'
+import auth from '../middleware/auth'
 
 export default (app) => {
     /* Route for User Registration  */
