@@ -1,50 +1,63 @@
-import db from '../db'
 import async from 'async'
 
 export default function (sequelize, DataTypes) {
   const Outlet = sequelize.define('Outlet', {
-    outlet_id : {
-      type          : DataTypes.INTEGER,
-      references    : 'Outlet_Account',
-      referencesKey : 'id'
+    outlet_id: {
+      type: DataTypes.INTEGER,
+      references: 'Outlet_Account',
+      referencesKey: 'id'
     },
-    tme_id : {
-      type          : DataTypes.INTEGER,
-      references    : 'TME_Account',
-      referencesKey : 'id'
+    tme_id: {
+      type: DataTypes.INTEGER,
+      references: 'TME_Account',
+      referencesKey: 'id'
     },
-    membership_id : {
-      type          : DataTypes.INTEGER,
-      references    : 'Membership_Type',
-      referencesKey : 'id'
+    membership_id: {
+      type: DataTypes.INTEGER,
+      references: 'Membership_Type',
+      referencesKey: 'id'
     },
-    bat_id : {
-      type      : DataTypes.STRING,
-      allowNull : true,
-      unique    : true
+    bat_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true
     },
-    outlet_name  : DataTypes.STRING,
-    points_value : {
-      type         : DataTypes.INTEGER,
-      defaultValue : 0
+    outlet_name: DataTypes.STRING,
+    points_value: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     },
-    points_expiration_date : DataTypes.DATE,
-    rebate_rate            : DataTypes.INTEGER
+    points_expiration_date: DataTypes.DATE,
+    rebate_rate: DataTypes.INTEGER
   }, {
-    timestamps      : true,
-    freezeTableName : true,
-    allowNULL       : true,
+    hooks: {
+      beforeCreate: function (Outlet, options) {
+        return new Promise((resolve, reject) => {
+          this.findOne({ where: { bat_id: Outlet.bat_id } })
+                        .then((batid) => {
+                          if (batid) {
+                            reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
+                          } else {
+                            resolve()
+                          }
+                        })
+        })
+      }
+    },
+    timestamps: true,
+    freezeTableName: true,
+    allowNULL: true,
 
-    classMethods : {
+    classMethods: {
       getAllOutlets (page, limit, offset) {
         return new Promise((resolve, reject) => {
-          if (page == -1) {
+          if (page === -1) {
             this.findAll({
-              order   : '`id` DESC',
-              include : [ {
-                model    : sequelize.import('OutletAccount'),
-                required : true
-              } ]
+              order: '`id` DESC',
+              include: [{
+                model: sequelize.import('OutletAccount'),
+                required: true
+              }]
             })
                             .then((data) => {
                               if (!data) {
@@ -56,12 +69,12 @@ export default function (sequelize, DataTypes) {
                                   sequelize.import('TmeAccount').find({ where: { id: item.tme_id } })
                                             .then((docs) => {
                                               const details = {
-                                                data : item,
-                                                tme  : docs
+                                                data: item,
+                                                tme: docs
                                               }
                                               outlet.push(details)
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(outlet)
                                               }
                                             })
@@ -72,11 +85,11 @@ export default function (sequelize, DataTypes) {
             this.findAll({
               offset,
               limit,
-              order   : '`id` DESC',
-              include : [ {
-                model    : sequelize.import('OutletAccount'),
-                required : true
-              } ]
+              order: '`id` DESC',
+              include: [{
+                model: sequelize.import('OutletAccount'),
+                required: true
+              }]
             })
                             .then((data) => {
                               if (!data) {
@@ -88,12 +101,12 @@ export default function (sequelize, DataTypes) {
                                   sequelize.import('TmeAccount').find({ where: { id: item.tme_id } })
                                             .then((docs) => {
                                               const details = {
-                                                data : item,
-                                                tme  : docs
+                                                data: item,
+                                                tme: docs
                                               }
                                               outlet.push(details)
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(outlet)
                                               }
                                             })
@@ -101,7 +114,7 @@ export default function (sequelize, DataTypes) {
                               }
                             })
           } else {
-            throw new Error(reject('Invalid Page Number'))
+            reject(new Error('Invalid Page Number'))
           }
         })
       },
@@ -119,8 +132,8 @@ export default function (sequelize, DataTypes) {
             }]
           })
                         .then((data) => {
-                          if (data == null) {
-                            reject('Outlet data is not found')
+                          if (data === null) {
+                            reject(new Error('Outlet data is not found'))
                           } else {
                             resolve(data)
                           }
@@ -132,23 +145,23 @@ export default function (sequelize, DataTypes) {
         return new Promise((resolve, reject) => {
           this.update({ tme_id: tmeid }, { where: { id } })
                         .then((data) => {
-                          if (data != 0) {
+                          if (data !== 0) {
                             resolve({
-                              status  : 1,
-                              message : 'Outlet Assigned'
+                              status: 1,
+                              message: 'Outlet Assigned'
                             })
                           } else {
                             resolve({
-                              status : 0,
-                              error  : 'Invalid Outlet Id'
+                              status: 0,
+                              error: 'Invalid Outlet Id'
                             })
                           }
                         })
                         .catch((err) => {
                           if (err) {
                             resolve({
-                              status : 0,
-                              error  : 'Invalid Tme Id'
+                              status: 0,
+                              error: 'Invalid Tme Id'
                             })
                           }
                         })
@@ -163,14 +176,13 @@ export default function (sequelize, DataTypes) {
                           if (data) {
                             resolve(data)
                           } else {
-                            reject('No Outlet Data Found')
+                            reject(new Error('No Outlet Data Found'))
                           }
                         })
         })
       }
     },
-
-    associate : (models) => {
+    associate: (models) => {
       Outlet.belongsTo(models.Tme, { foreignKey: 'tme_id' })
       Outlet.belongsTo(models.Membership, { foreignKey: 'membership_id' })
       Outlet.belongsTo(models.outletAccount, { foreignKey: 'outlet_id' })

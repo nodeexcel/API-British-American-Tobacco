@@ -5,19 +5,19 @@ import * as BaseProvider from './BaseProvider'
 const create = (model, body, res) => {
   return new Promise((resolve, reject) => {
     if (!body.bat_id && !body.password && !body.first_name && !body.last_name && !body.email && !body.mobile_no) {
-      reject('All fields are Required')
+      reject(new Error('All fields are Required'))
     } else if (!body.bat_id) {
-      reject('BAT ID is Required')
+      reject(new Error('BAT ID is Required'))
     } else if (!body.password) {
-      reject('Password is Required')
+      reject(new Error('Password is Required'))
     } else if (!body.first_name) {
-      reject('First Name is Required')
+      reject(new Error('First Name is Required'))
     } else if (!body.last_name) {
-      reject('Last Name is Required')
+      reject(new Error('Last Name is Required'))
     } else if (!body.email) {
-      reject('Email is Required')
+      reject(new Error('Email is Required'))
     } else if (!body.mobile_no) {
-      reject('Mobile No. is Required')
+      reject(new Error('Mobile No. is Required'))
     } else {
       let date = new Date()
       let salt = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()

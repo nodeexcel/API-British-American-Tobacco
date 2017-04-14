@@ -1,7 +1,5 @@
 import moment from 'moment'
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
-import config from '../config'
 import db from '../db'
 
 export class AuthController {

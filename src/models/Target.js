@@ -15,7 +15,7 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       getAllTargets (page, limit, offset) {
         return new Promise((resolve, reject) => {
-          if (page == '-1') {
+          if (page === -1) {
             this.findAll({ order: '`id` DESC' })
                             .then((data) => {
                               resolve(data)

@@ -1,38 +1,17 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import TmeProvider from '../providers/TmeAccountProvider.js'
-import db from '../db'
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
 import async from 'async'
-import crypto from 'crypto'
 
 export class TmeController extends BaseAPIController {
     /* Controller for TME Register  */
   create = (req, res) => {
     TmeProvider.create(this._db.Tme, req.body, res)
             .then((tmeUser) => {
-              this._db.Tme.find({ where: { email: tmeUser.email } })
-                    .then((data) => {
-                      if (data) {
-                        throw new Error('Email is already in use.')
-                      } else {
-                        this._db.Tme.find({ where: { bat_id: tmeUser.bat_id } })
-                                .then((data) => {
-                                  if (data) {
-                                    throw new Error('BAT ID already used. Please provide a unique BAT ID')
-                                  } else {
-                                    this._db.Tme.create(tmeUser)
-                                            .then(() => res.json({ status: 1 }))
-                                            .catch(this.handleErrorResponse.bind(null, res))
-                                  }
-                                })
-                                .catch(this.handleErrorResponse.bind(null, res))
-                      }
-                    })
+              this._db.Tme.create(tmeUser)
+                    .then(() => res.json({ status: 1 }))
                     .catch(this.handleErrorResponse.bind(null, res))
-            })
-            .catch(this.handleErrorResponse.bind(null, res))
+            }).catch(this.handleErrorResponse.bind(null, res))
   }
 
     /* Controller for TME Login  */
@@ -66,7 +45,7 @@ export class TmeController extends BaseAPIController {
     let offset = (page - 1) * limit
     this._db.Tme.getAllTme(page, limit, offset)
             .then((data) => {
-              if (data[0] == null) {
+              if (data[0] === null) {
                 throw new Error('Tme data not found')
               } else {
                 res.json(data)
@@ -91,13 +70,13 @@ export class TmeController extends BaseAPIController {
 
     // search outlets...
   search = (req, res) => {
-    if (req.params.type == 'ALL') {
+    if (req.params.type === 'ALL') {
       this._db.Outlet.findAll({ where: { outlet_name: { like: '%' + req.params.keyword + '%' } } })
                 .then((data) => {
                   res.json(data)
                 })
                 .catch(this.handleErrorResponse.bind(null, res))
-    } else if (req.params.type == 'UNASSIGN') {
+    } else if (req.params.type === 'UNASSIGN') {
       this._db.Outlet.findAll({ where: { outlet_name: { like: '%' + req.params.keyword + '%' }, tme_id: null } })
                 .then((data) => {
                   res.json(data)
@@ -108,13 +87,13 @@ export class TmeController extends BaseAPIController {
 
     // search All....
   searchAll = (req, res) => {
-    if (req.params.type == 'ALL') {
+    if (req.params.type === 'ALL') {
       this._db.Outlet.findAll()
                 .then((data) => {
                   res.json(data)
                 })
                 .catch(this.handleErrorResponse.bind(null, res))
-    } else if (req.params.type == 'UNASSIGN') {
+    } else if (req.params.type === 'UNASSIGN') {
       this._db.Outlet.findAll({ where: { tme_id: null } })
                 .then((data) => {
                   res.json(data)

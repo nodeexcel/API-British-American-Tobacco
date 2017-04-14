@@ -12,17 +12,17 @@ export class MembershipController extends BaseAPIController {
                 order: membership.order,
                 min_required_points: membership.min_required_points
               })
-                .then((membership) => {
-                  if (membership) {
-                    res.json(membership)
-                  } else {
-                    throw new Error('Membership Data Is Not Added')
-                  }
-                })
-                .catch(this.handleErrorResponse.bind(null, res))
+                    .then((membership) => {
+                      if (membership) {
+                        res.json(membership)
+                      } else {
+                        throw new Error('Membership Data Is Not Added')
+                      }
+                    })
+                    .catch(this.handleErrorResponse.bind(null, res))
             })
 
-            .catch(this.handleErrorResponse.bind(null, res))
+        .catch(this.handleErrorResponse.bind(null, res))
   }
 
     // update membership.....
@@ -44,9 +44,9 @@ export class MembershipController extends BaseAPIController {
     this._db.Membership.findAll({
       order: '`id` DESC'
     })
-            .then((membership) => {
-              res.json(membership)
-            })
+    .then((membership) => {
+      res.json(membership)
+    })
   }
 
     // get by id...

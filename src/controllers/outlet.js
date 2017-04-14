@@ -1,8 +1,5 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
 import OutletProvider from '../providers/OutletProvider.js'
-import db from '../db'
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
 
 export class OutletController extends BaseAPIController {
@@ -10,48 +7,39 @@ export class OutletController extends BaseAPIController {
   create = (req, res) => {
     OutletProvider.create(this._db, req.body, res)
             .then((outlet) => {
-              this._db.Membership.find({ where: { id: outlet.membership_id } })
-                    .then(() => this._db.outletAccount.find({ where: { email: outlet.email } }))
-                    .then((data) => {
-                      if (data) {
-                        throw new Error('Email Already In Use')
-                      } else {
-                        this._db.Outlet.find({ where: { bat_id: outlet.bat_id } })
-                                .then((data) => {
-                                  if (data) {
-                                    throw new Error('BAT ID already used. Please provide a unique BAT ID')
-                                  } else {
-                                    this._db.outletAccount.create({
-                                      salt: outlet.salt,
-                                      password: outlet.password,
-                                      first_name: outlet.first_name,
-                                      last_name: outlet.last_name,
-                                      email: outlet.email,
-                                      mobile: outlet.mobile,
-                                      birthday: outlet.birthday,
-                                      type_name: outlet.type_name,
-                                      membership_number: outlet.membership_number
-                                    })
-                                            .then(() => this._db.outletAccount.find({ where: { email: outlet.email } }))
-                                            .then(data => this._db.Outlet.create({
-                                              outlet_id: data.id,
-                                              bat_id: outlet.bat_id,
-                                              membership_id: outlet.membership_id,
-                                              outlet_name: outlet.outlet_name,
-                                              points_value: outlet.points_value,
-                                              points_expiration_date: outlet.points_expiration_date,
-                                              rebate_rate: outlet.rebate_rate
-                                            }))
-                                            .then(() => res.json({ status: 1 }))
-                                            .catch(this.handleErrorResponse.bind(null, res))
-                                  }
-                                })
-                                .catch(this.handleErrorResponse.bind(null, res))
-                      }
-                    })
-                    .catch(this.handleErrorResponse.bind(null, res))
+              this._db.outletAccount.create({
+                salt: outlet.salt,
+                password: outlet.password,
+                first_name: outlet.first_name,
+                last_name: outlet.last_name,
+                email: outlet.email,
+                mobile: outlet.mobile,
+                birthday: outlet.birthday,
+                type_name: outlet.type_name,
+                membership_number: outlet.membership_number
+              })
+              .then((data) => {
+                if (data) {
+                  this._db.Outlet.create({
+                    outlet_id: data.id,
+                    bat_id: outlet.bat_id,
+                    membership_id: outlet.membership_id,
+                    outlet_name: outlet.outlet_name,
+                    points_value: outlet.points_value,
+                    points_expiration_date: outlet.points_expiration_date,
+                    rebate_rate: outlet.rebate_rate
+                  })
+            .then(() => res.json({ status: 1 }))
+            .catch((error) => {
+              this._db.outletAccount.destroy({ where : { id: data.id } })
+              throw new Error(error)
             })
-                .catch(this.handleErrorResponse.bind(null, res))
+            .catch(this.handleErrorResponse.bind(null, res))
+                }
+              })
+              .catch(this.handleErrorResponse.bind(null, res))
+            })
+            .catch(this.handleErrorResponse.bind(null, res))
   }
 
   checkLogin = (req, res) => {

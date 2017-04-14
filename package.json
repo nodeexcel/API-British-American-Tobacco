@@ -9,6 +9,7 @@
     "start": "node dist",
     "prestart": "npm run -s build",
     "test": "eslint src",
+    "lint": "eslint src",
     "debug": "babel src -d dist --watch --source-maps"
   },
   "repository": "developit/express-es6-rest-api",
@@ -24,6 +25,7 @@
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",
     "cors": "^2.7.1",
+    "csvtojson": "^1.1.4",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-config-airbnb-base": "^11.1.3",

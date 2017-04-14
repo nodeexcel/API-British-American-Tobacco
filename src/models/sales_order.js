@@ -40,7 +40,7 @@ export default function (sequelize, DataTypes) {
           })
                         .then((data) => {
                           if (data)	{ resolve(data) }	else {
-                            reject('data not found')
+                            reject(new Error('data not found'))
                           }
                         })
         })

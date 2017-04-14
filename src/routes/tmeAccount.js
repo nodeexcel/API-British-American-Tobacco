@@ -12,11 +12,10 @@ export default (app) => {
   app.route('/tme/get/:page/:limit').get(auth.requiresLogin, tme.get)
 
     /* route for get by id */
-  app.route('/tme/getById/:tmeid').get(auth.requiresLogin, tme.getById)
+  app.route('/tme/getById/:id').get(auth.requiresLogin, tme.getById)
 
     /* Route for update TME */
-  app.route('/tme/update/:tmeid').put(auth.requiresLogin, tme.update)
-
+  app.route('/tme/update/:id').put(auth.requiresLogin, tme.update)
 	/* route of searching */
   app.route('/tme/searchoutlet/:type/:keyword').get(auth.requiresLogin, tme.search)
 
@@ -32,7 +31,7 @@ export default (app) => {
     /* Unassign Outlet */
   app.route('/tme/unassignoutlet/:outletid').put(auth.requiresLogin, tme.unAssignOutlet)
 
-  app.param('tmeid', tme.tmeGetById)
+  app.param('id', tme.tmeGetById)
 
   return app
 }

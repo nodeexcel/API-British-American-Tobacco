@@ -30,7 +30,7 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       getPromotion (limit, offset, page) {
         return new Promise((resolve, reject) => {
-          if (page == -1) {
+          if (page === -1) {
             this.findAll({
               order: '`id` DESC',
               include: [{

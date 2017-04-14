@@ -23,6 +23,20 @@ export default function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
+    hooks: {
+      beforeCreate: function (SKU, options) {
+        return new Promise((resolve, reject) => {
+          this.findOne({ where: { bat_id: SKU.bat_id } })
+                        .then((batid) => {
+                          if (batid) {
+                            reject(new Error('BAT ID already used. Please provide a unique BAT ID'))
+                          } else {
+                            resolve()
+                          }
+                        })
+        })
+      }
+    },
     timestamps: true,
     freezeTableName: true,
 
@@ -56,7 +70,7 @@ export default function (sequelize, DataTypes) {
                                               }
 
                                               count--
-                                              if (count == 0) {
+                                              if (count === 0) {
                                                 resolve(sku)
                                               }
                                             })
@@ -84,7 +98,6 @@ export default function (sequelize, DataTypes) {
                         .catch((error) => { res.json({ error }) })
         })
       }
-
     },
     associate: (models) => {
       Sku.hasOne(models.Promotion, { foreignKey: 'sku_id' })

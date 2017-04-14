@@ -1,6 +1,4 @@
-import express from 'express'
 import BaseAPIController from './BaseAPIController'
-import db from '../db'
 
 export class PromotionController extends BaseAPIController {
 	// add promotions....

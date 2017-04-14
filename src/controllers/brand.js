@@ -7,18 +7,10 @@ export class BrandController extends BaseAPIController {
   brandCreate = (req, res) => {
     BrandProvider.create(this._db.Brand, req.body, res)
             .then((brand) => {
-              this._db.Brand.find({ where: { bat_id: brand.bat_id } })
-                    .then((data) => {
-                      if (data) {
-                        throw new Error('BAT ID already used. Please provide a unique BAT ID')
-                      } else {
-                        this._db.Brand.create(brand)
-                                .then(res.json.bind(res))
-                      }
-                    })
+              this._db.Brand.create(brand)
+                    .then(res.json.bind(res))
                     .catch(this.handleErrorResponse.bind(null, res))
-            })
-            .catch(this.handleErrorResponse.bind(null, res))
+            }).catch(this.handleErrorResponse.bind(null, res))
   }
 
     // fetching data from brand...
@@ -58,7 +50,7 @@ export class BrandController extends BaseAPIController {
     // update brand ....
   updateBrand = (req, res) => {
     let id = req.params.id
-    this._db.Brand.find({ where : { bat_id : req.body.bat_id } })
+    this._db.Brand.find({ where: { bat_id: req.body.bat_id } })
             .then((data) => {
               if (data) {
                 throw new Error('BAT ID already used. Please provide a unique BAT ID')

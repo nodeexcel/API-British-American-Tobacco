@@ -16,13 +16,27 @@ export default function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
+    hooks: {
+      beforeCreate: function (Outlet_Account, options) {
+        return new Promise((resolve, reject) => {
+          this.findOne({ where: { email: Outlet_Account.email } })
+                        .then((email) => {
+                          if (email) {
+                            reject(new Error('Email Already In Use'))
+                          } else {
+                            resolve()
+                          }
+                        })
+        })
+      }
+    },
     timestamps: true,
     freezeTableName: true,
 
     classMethods: {
       getAllOutlets (page, limit, offset) {
         return new Promise((resolve, reject) => {
-          if (page == -1) {
+          if (page === -1) {
             this.findAll({ order: '`id` DESC' })
                             .then((data) => {
                               resolve(data)
