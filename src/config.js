@@ -5,7 +5,7 @@ module.exports = {
   db          : {
     host     : 'localhost',
     name     : 'dathena',
-    password : '123',
+    password : 'java@123',
     username : 'root'
   }
 }
