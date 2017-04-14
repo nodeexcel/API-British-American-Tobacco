@@ -117,14 +117,21 @@ export class TmeController extends BaseAPIController {
 
     // get tme by id.....
   getById = (req, res) => {
-    this._db.Tme.find({ where: { id: req.params.id } })
-            .then((data) => {
-              if (data) {
-                res.json(data)
+    res.json(req.tme)
+  }
+
+  // tme get by id
+
+  tmeGetById =(req, res, next, id) => {
+    this._db.Tme.findById(id)
+            .then((tme) => {
+              if (tme) {
+                req.tme = tme
               } else {
                 throw new Error('Invalid Tme Id')
               }
             })
+            .then(next)
             .catch(this.handleErrorResponse.bind(null, res))
   }
 

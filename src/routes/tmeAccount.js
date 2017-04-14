@@ -16,7 +16,6 @@ export default (app) => {
 
     /* Route for update TME */
   app.route('/tme/update/:id').put(auth.requiresLogin, tme.update)
-
 	/* route of searching */
   app.route('/tme/searchoutlet/:type/:keyword').get(auth.requiresLogin, tme.search)
 
@@ -31,6 +30,8 @@ export default (app) => {
 
     /* Unassign Outlet */
   app.route('/tme/unassignoutlet/:outletid').put(auth.requiresLogin, tme.unAssignOutlet)
+
+  app.param('id', tme.tmeGetById)
 
   return app
 }

@@ -17,5 +17,7 @@ export default (app) => {
     // delete brand ....
   app.route('/brand/delete/:id').delete(auth.requiresLogin, brand.deleteBrand)
 
+  app.param('id', brand.brandGetById)
+
   return app
 }

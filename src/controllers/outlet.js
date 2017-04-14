@@ -114,8 +114,7 @@ export class OutletController extends BaseAPIController {
 
     // get outlet by outlet id...
   outletById = (req, res) => {
-    let id = req.params.id
-    this._db.Outlet.getOutletById(id)
+    this._db.Outlet.getOutletById(req.outlet.id)
             .then((data) => {
               if (!data) {
                 throw new Error('Outlet Data Not Found')
@@ -124,6 +123,20 @@ export class OutletController extends BaseAPIController {
               }
             })
             .catch(this.handleErrorResponse.bind(null, res))
+  }
+
+  // get by id....
+  getOutletById = (req, res, next, id) => {
+    this._db.Outlet.findById(id)
+      .then((outlet) => {
+        if (outlet) {
+          req.outlet = outlet
+        } else {
+          throw new Error('Outlet Data Not Found')
+        }
+      })
+      .then(next)
+      .catch(this.handleErrorResponse.bind(null, res))
   }
 
     // Update  Outlet....

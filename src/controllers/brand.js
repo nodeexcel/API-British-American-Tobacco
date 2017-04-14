@@ -31,16 +31,20 @@ export class BrandController extends BaseAPIController {
 
     // get brand by id...
   getBrandById = (req, res) => {
-    let id = req.params.id
+    res.json(req.brand)
+  }
+
+  brandGetById =(req, res, next, id) => {
     this._db.Brand.findById(id)
-            .then((data) => {
-              if (data) {
-                this._db.Brand.getBrandById(id)
-                        .then(res.json.bind(res))
+            .then((brand) => {
+              if (brand) {
+                req.brand = brand
               } else {
                 throw new Error('Invalid id')
               }
-            }).catch(this.handleErrorResponse.bind(null, res))
+            })
+            .then(next)
+            .catch(this.handleErrorResponse.bind(null, res))
   }
 
     // update brand ....

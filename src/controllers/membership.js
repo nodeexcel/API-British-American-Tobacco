@@ -52,15 +52,16 @@ export class MembershipController extends BaseAPIController {
     // get by id...
 
   getById = (req, res) => {
-    this._db.Membership.findById(req.params.id)
-            .then((membership) => {
-              if (membership) {
-                res.json(membership)
-              } else {
-                throw new Error('Membership Data Not Found')
-              }
-            })
-            .catch(this.handleErrorResponse.bind(null, res))
+    res.json(req.membership)
+  }
+  // get id by params....
+  getMembershipById = (req, res, next, id) => {
+    return this._db.Membership.findById(id)
+      .then((membership) => {
+        req.membership = membership
+      })
+    .then(next)
+    .catch(this.handleErrorResponse.bind(null, res))
   }
 }
 

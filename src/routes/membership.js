@@ -14,5 +14,7 @@ export default (app) => {
     /* Route for update */
   app.route('/membership/update/:id').put(auth.requiresLogin, membership.update)
 
+  app.param('id', membership.getMembershipById)
+
   return app
 }

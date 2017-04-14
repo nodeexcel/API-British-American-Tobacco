@@ -19,5 +19,7 @@ export default (app) => {
     /* Route for update Outlet */
   app.route('/outlet/update/:id').put(auth.requiresLogin, outlet.update)
 
+  app.param('id', outlet.getOutletById)
+
   return app
 }

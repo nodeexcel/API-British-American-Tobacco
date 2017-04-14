@@ -6,6 +6,7 @@ import auth from '../middleware/auth'
 export default (app) => {
 // inserting data into rebateRequest..
   app.route('/add/rebateRequest').post(auth.requiresLogin, rebateRequest.create)
+
 	// app.route('/add/rebateRequest').post(rebateRequest.create);
 
 // getting data of rebateRequest....

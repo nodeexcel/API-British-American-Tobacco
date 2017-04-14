@@ -31,15 +31,31 @@ export class SkuController extends BaseAPIController {
 
     // get sku by id..
   getSkuById = (req, res) => {
-    let id = req.params.id
-    this._db.Sku.find({ where: { id: id } })
-            .then((data) => {
-              if (data) {
-                this._db.Sku.getSkuById(id).then(res.json.bind(res))
-              } else {
-                throw new Error('Invalid id')
-              }
-            }).catch(this.handleErrorResponse.bind(null, res))
+    if (req.sku) {
+      this._db.Brand.findById(req.sku.id)
+        .then((brand) => {
+          let data = {
+            sku : req.sku,
+            brandname: brand.brandname
+          }
+          res.json(data)
+        })
+        .catch(this.handleErrorResponse.bind(null, res))
+    } else {
+      throw new Error('Invalid id')
+    }
+  }
+
+  // app.params
+  skuById =(req, res, next, id) => {
+    this._db.Sku.findById(id)
+        .then((sku) => {
+          if (sku) {
+            req.sku = sku
+          }
+        })
+        .then(next)
+        .catch(this.handleErrorResponse.bind(null, res))
   }
 
     // update sku...
